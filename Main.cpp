@@ -7,7 +7,7 @@
 void recursiveThreshold(Matrix* edges, int column, int row, int reachX, int reachY);
 
 int main() {
-	Image image("C:/Users/dillo/OneDrive/Documents/Projects/MatrixModule/PixelSorter/Images/ethan.bmp");
+	Image image("C:/Users/dillo/OneDrive/Documents/Projects/MatrixModule/PixelSorter/Images/meinthebog.bmp");
 	Matrix imageGrey = (image.pixels[0]+image.pixels[1]+image.pixels[2]) * (1.0f/3.0f);
 	Matrix k_sobelx(3, 3);
 	Matrix k_sobely(3, 3);
@@ -92,10 +92,26 @@ int main() {
 		hysteresis.data[i] = hysteresis.data[i] < 1 ? 0 : 1;
 	}
 
+	Matrix sorted = hysteresis;
+	int segmentStart = 0;
+	for (int i = 0; i < image.height; i++) {
+		for (int j = 0; j < image.width; j++) {
+			if (hysteresis.data[j + (i*image.width)] == 1 || j == image.width - 1) {
+				for (int k = segmentStart; k <= j; k++) {
+					sorted.data[k + (i*image.width)] = ((float)j) / image.width;
+				}
+				segmentStart = j;
+			}
+		}
+		segmentStart = 0;
+	}
+
+	Image sort = sorted;
 	Image hyst = hysteresis;
 	Image nonmax = nms;
 	Image magn = magnitudes;
 	Image anglR = anglesRound;
+	sort.saveToBMP("C:/Users/dillo/OneDrive/Documents/Projects/MatrixModule/PixelSorter/Images/Output/ethanSorted.bmp");
 	hyst.saveToBMP("C:/Users/dillo/OneDrive/Documents/Projects/MatrixModule/PixelSorter/Images/Output/ethanHysteresis.bmp");
 	nonmax.saveToBMP("C:/Users/dillo/OneDrive/Documents/Projects/MatrixModule/PixelSorter/Images/Output/ethanNMS.bmp");
 	magn.saveToBMP("C:/Users/dillo/OneDrive/Documents/Projects/MatrixModule/PixelSorter/Images/Output/ethanMagnitudes.bmp");
