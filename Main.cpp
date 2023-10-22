@@ -7,7 +7,7 @@
 void recursiveThreshold(Matrix* edges, int column, int row, int reachX, int reachY);
 
 int main() {
-	Image image("C:/Users/dillo/OneDrive/Documents/Projects/MatrixModule/PixelSorter/Images/meinthebog.bmp");
+	Image image("C:/Users/dillo/OneDrive/Documents/Projects/MatrixModule/PixelSorter/Images/symboltodelete.bmp");
 	Matrix imageGrey = (image.pixels[0]+image.pixels[1]+image.pixels[2]) * (1.0f/3.0f);
 	Matrix k_sobelx(3, 3);
 	Matrix k_sobely(3, 3);
@@ -92,13 +92,26 @@ int main() {
 		hysteresis.data[i] = hysteresis.data[i] < 1 ? 0 : 1;
 	}
 
-	Matrix sorted = hysteresis;
+	Matrix sorted = imageGrey;
+	Image sort = image;
 	int segmentStart = 0;
 	for (int i = 0; i < image.height; i++) {
 		for (int j = 0; j < image.width; j++) {
 			if (hysteresis.data[j + (i*image.width)] == 1 || j == image.width - 1) {
-				for (int k = segmentStart; k <= j; k++) {
-					sorted.data[k + (i*image.width)] = ((float)j) / image.width;
+				for (int k = 1; k <= j - segmentStart; k++) {
+					int swap = false;
+					for (int l = segmentStart; l <= (j - k); l++) {
+						if (sorted.data[l + (i * image.width)] > sorted.data[(l + 1) + (i * image.width)]) {
+							std::swap(sorted.data[l + (i * image.width)], sorted.data[(l + 1) + (i * image.width)]);
+							for (int m = 0; m < 3; m++) {
+								std::swap(sort.pixels[m].data[l + (i * image.width)], sort.pixels[m].data[(l + 1) + (i * image.width)]);
+							}
+							swap = true;
+						}
+					}
+					if (!swap) {
+						break;
+					}
 				}
 				segmentStart = j;
 			}
@@ -106,16 +119,15 @@ int main() {
 		segmentStart = 0;
 	}
 
-	Image sort = sorted;
 	Image hyst = hysteresis;
 	Image nonmax = nms;
 	Image magn = magnitudes;
 	Image anglR = anglesRound;
-	sort.saveToBMP("C:/Users/dillo/OneDrive/Documents/Projects/MatrixModule/PixelSorter/Images/Output/ethanSorted.bmp");
-	hyst.saveToBMP("C:/Users/dillo/OneDrive/Documents/Projects/MatrixModule/PixelSorter/Images/Output/ethanHysteresis.bmp");
-	nonmax.saveToBMP("C:/Users/dillo/OneDrive/Documents/Projects/MatrixModule/PixelSorter/Images/Output/ethanNMS.bmp");
-	magn.saveToBMP("C:/Users/dillo/OneDrive/Documents/Projects/MatrixModule/PixelSorter/Images/Output/ethanMagnitudes.bmp");
-	anglR.saveToBMP("C:/Users/dillo/OneDrive/Documents/Projects/MatrixModule/PixelSorter/Images/Output/ethanAngles.bmp");
+	sort.saveToBMP("C:/Users/dillo/OneDrive/Documents/Projects/MatrixModule/PixelSorter/Images/Output/symbolSorted.bmp");
+	//hyst.saveToBMP("C:/Users/dillo/OneDrive/Documents/Projects/MatrixModule/PixelSorter/Images/Output/ethanHysteresis.bmp");
+	//nonmax.saveToBMP("C:/Users/dillo/OneDrive/Documents/Projects/MatrixModule/PixelSorter/Images/Output/ethanNMS.bmp");
+	//magn.saveToBMP("C:/Users/dillo/OneDrive/Documents/Projects/MatrixModule/PixelSorter/Images/Output/ethanMagnitudes.bmp");
+	//anglR.saveToBMP("C:/Users/dillo/OneDrive/Documents/Projects/MatrixModule/PixelSorter/Images/Output/ethanAngles.bmp");
 	return 0;
 }
 
