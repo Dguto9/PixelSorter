@@ -1,0 +1,6 @@
+[submodule "ImageProcessingLibrary"]
+	path = ImageProcessingLibrary
+	url = https://github.com/Dguto9/ImageProcessingLibrary
+[submodule "MatrixModule"]
+	path = MatrixModule
+	url = https://github.com/Dguto9/MatrixModule
