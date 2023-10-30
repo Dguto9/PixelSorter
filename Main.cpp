@@ -1,6 +1,6 @@
 #include "Matrix.h"
 #include "Image.h"
-#include "ImageProcessing/Utils.h"
+#include "ImageProcessingLibrary/Utils.h"
 #include <iostream>
 #include <math.h>
 #include <string>
