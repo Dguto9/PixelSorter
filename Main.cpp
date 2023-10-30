@@ -4,6 +4,7 @@
 #include <iostream>
 #include <math.h>
 #include <string>
+#include <cstring>
 
 std::string inputDir;
 std::string outputDir;
@@ -289,7 +290,7 @@ void sortImageY(Image* result, Matrix* sortBy, Matrix* edges) {
 }
 
 void help() {
-	std::cout << "PixelSorter - Dillon Gutowski (Dguto9) - https://github.com/dguto9/pixel-sorter\n\n" <<	
+	std::cout << "PixelSorter - Dillon Gutowski (Dguto9) - https://github.com/dguto9/pixelsorter\n\n" <<	
 		"PixelSorter [inputDir] [sortAxis] [sortBy] [sortDirection] [blurSize] [blurStdDev] [thresholdLow] [thresholdHigh]\n\n" <<
 		"Arguments:\n" <<
 		"\tinputDir     : the .bmp file to sort\n" <<
